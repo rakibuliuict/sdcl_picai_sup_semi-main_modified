@@ -1,0 +1,5 @@
+python train_sdcl_picai.py --root_path /content/drive/MyDrive/Research/Dataset/ssl_final_data/picai_data_144_128_16 --gpu 0 --batch_size 2 --max_epoch 30 --num_classes 2
+
+
+
+python train.py --root_path /content/drive/MyDrive/dataset/picai_144_128_16 --gpu 0 --batch_size 2 --pretrain_epochs 3 --max_epoch 5 --lr 1e-3 --snapshot_path ./runs_sdcl_picai

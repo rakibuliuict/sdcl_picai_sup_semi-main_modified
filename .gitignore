@@ -1,0 +1,60 @@
+# --------------------------------------------------------------------
+# Global Python ignores
+# --------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.so
+*.egg
+*.egg-info/
+.eggs/
+build/
+dist/
+*.log
+*.tmp
+*.swp
+*.bak
+*.DS_Store
+.env
+.venv/
+venv/
+.env/
+*.ipynb_checkpoints/
+
+# --------------------------------------------------------------------
+# IDE / editor files
+# --------------------------------------------------------------------
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# --------------------------------------------------------------------
+# Data and checkpoints (DON’T push large data)
+# --------------------------------------------------------------------
+# Raw or processed MRI data
+DATA_ROOT/
+data/
+outputs/
+
+
+datasets/
+*.nii
+*.nii.gz
+
+# Model weights and training outputs
+outputs/
+checkpoints/
+runs/
+logs/
+wandb/
+tensorboard/
+
+runs_sdcl_picai/
+runs_sdcl_picai
+
+# --------------------------------------------------------------------
+# OS / misc
+# --------------------------------------------------------------------
+Thumbs.db
+.DS_Store
