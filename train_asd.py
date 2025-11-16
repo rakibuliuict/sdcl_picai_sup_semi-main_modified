@@ -1,4 +1,3 @@
-
 import os
 import argparse
 import logging
@@ -24,7 +23,7 @@ from losses import (
     get_XOR_region,
 )
 
-# MONAI transformers
+# MONAI transformer models
 from monai.networks.nets import SwinUNETR, UNETR
 
 
@@ -82,10 +81,10 @@ class BCPNet(nn.Module):
             self.net = ResUNet3D(in_channels=in_chns, num_classes=num_classes)
 
         elif model_name == "swinunetr":
-            # Your image size is (C, H, W, D) = (3, 144, 128, 16)
-            # MONAI expects img_size as (H, W, D)
+            # You showed this working pattern:
+            # SwinUNETR(in_channels=4, out_channels=3, feature_size=48, use_checkpoint=True)
+            # so we follow that style.
             self.net = SwinUNETR(
-                img_size=(144, 128, 16),
                 in_channels=in_chns,
                 out_channels=num_classes,
                 feature_size=48,
@@ -93,18 +92,12 @@ class BCPNet(nn.Module):
             )
 
         elif model_name == "unetr":
+            # Most MONAI versions: UNETR(in_channels=..., out_channels=..., img_size=(H,W,D), ...)
+            # If your MONAI complains, we'll adjust this call only.
             self.net = UNETR(
-                img_size=(144, 128, 16),
                 in_channels=in_chns,
                 out_channels=num_classes,
-                feature_size=16,
-                hidden_size=768,
-                mlp_dim=3072,
-                num_heads=12,
-                pos_embed="perceptron",
-                norm_name="instance",
-                res_block=True,
-                dropout_rate=0.0,
+                img_size=(144, 128, 16),
             )
 
         else:
@@ -122,15 +115,9 @@ class BCPNet(nn.Module):
 def update_ema_variables(model, ema_model, alpha=0.99):
     """
     EMA update for teacher model.
-    Updates both parameters and buffers (e.g., norm running stats).
     """
-    # EMA for parameters
     for ema_param, param in zip(ema_model.parameters(), model.parameters()):
         ema_param.data.mul_(alpha).add_(param.data, alpha=1 - alpha)
-
-    # keep buffers (like running_mean / running_var) in sync
-    for ema_buf, buf in zip(ema_model.buffers(), model.buffers()):
-        ema_buf.data.copy_(buf.data)
 
 
 # -------------------------
@@ -832,7 +819,6 @@ if __name__ == "__main__":
     parser = get_parser()
     args = parser.parse_args()
     train(args)
-
 
 
 # import os
