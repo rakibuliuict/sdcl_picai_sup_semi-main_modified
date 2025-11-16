@@ -2,4 +2,11 @@ python train_sdcl_picai.py --root_path /content/drive/MyDrive/Research/Dataset/s
 
 
 
-python train.py --root_path /content/drive/MyDrive/dataset/picai_144_128_16 --gpu 0 --batch_size 2 --pretrain_epochs 3 --max_epoch 5 --lr 1e-3 --snapshot_path ./runs_sdcl_picai
+python train.py --root_path /content/drive/MyDrive/dataset/picai_144_128_16 --model1 swinunetr --model2 unetr --gpu 0 --batch_size 2 --pretrain_epochs 3 --max_epoch 5 --lr 1e-3 --snapshot_path ./runs_sdcl_picai
+
+
+
+python train_sdcl_picai.py \
+  --root_path /path/to/picai_root \
+  --model1 swinunetr \
+  --model2 unetr
