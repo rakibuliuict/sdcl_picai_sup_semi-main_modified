@@ -24,7 +24,8 @@ from losses import (
 )
 
 # MONAI transformer models
-from monai.networks.nets import SwinUNETR, UNETR, VNet
+from monai.networks.nets import SwinUNETR, UNETR, VNet, UNet
+from monai.networks.layers import Norm
 
 
 # -------------------------
@@ -101,9 +102,29 @@ class BCPNet(nn.Module):
                     out_channels=2       # Matches ground truth mask channels
                 )
 
+        elif model_name == "unetmonai":
+            # You showed this working pattern:
+            # SwinUNETR(in_channels=4, out_channels=3, feature_size=48, use_checkpoint=True)
+            # so we follow that style.
+            self.net = UNet(
+                spatial_dims=3,
+                in_channels=3,
+                out_channels=2,
+                channels=(16,32, 64, 128,256),
+                strides=(2,2,2,2),
+                num_res_units=2,
+                norm=Norm.BATCH,
+            )
 
-
-
+# model = UNet(
+#     spatial_dims=3,
+#     in_channels=3,
+#     out_channels=2,
+#     channels=(16,32, 64, 128,256),
+#     strides=(2,2,2,2),
+#     num_res_units=2,
+#     norm=Norm.BATCH,
+# ).to(device)
         elif model_name == "unetr":
             # Most MONAI versions: UNETR(in_channels=..., out_channels=..., img_size=(H,W,D), ...)
             # If your MONAI complains, we'll adjust this call only.
