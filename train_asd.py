@@ -24,7 +24,7 @@ from losses import (
 )
 
 # MONAI transformer models
-from monai.networks.nets import SwinUNETR, UNETR, VNet, UNet
+from monai.networks.nets import SwinUNETR, UNETR, VNet, UNet, AttentionUnet
 from monai.networks.layers import Norm
 
 
@@ -96,11 +96,13 @@ class BCPNet(nn.Module):
             # You showed this working pattern:
             # SwinUNETR(in_channels=4, out_channels=3, feature_size=48, use_checkpoint=True)
             # so we follow that style.
-            self.net = VNet(
-                    spatial_dims=3,      # For 3D volumetric data
-                    in_channels=3,       # Matches input image channels
-                    out_channels=2       # Matches ground truth mask channels
-                )
+            self.net = AttentionUnet(
+                spatial_dims=3,
+                in_channels=3,
+                out_channels=2,
+                channels=(16,32,64,128,256),
+                strides=(2,2,2,2),
+            )
 
         elif model_name == "unetmonai":
             # You showed this working pattern:

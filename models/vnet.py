@@ -8,4 +8,4 @@ import torch
 
 
 
-__all__ = ["VNet"]
+__all__ = ["AttentionUnet"]
