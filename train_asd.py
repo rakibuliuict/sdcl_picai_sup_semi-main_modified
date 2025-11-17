@@ -24,7 +24,7 @@ from losses import (
 )
 
 # MONAI transformer models
-from monai.networks.nets import SwinUNETR, UNETR
+from monai.networks.nets import SwinUNETR, UNETR, VNet
 
 
 # -------------------------
@@ -90,6 +90,19 @@ class BCPNet(nn.Module):
                 feature_size=48,
                 use_checkpoint=True,
             )
+
+        elif model_name == "vnet":
+            # You showed this working pattern:
+            # SwinUNETR(in_channels=4, out_channels=3, feature_size=48, use_checkpoint=True)
+            # so we follow that style.
+            self.net = VNet(
+                    spatial_dims=3,      # For 3D volumetric data
+                    in_channels=3,       # Matches input image channels
+                    out_channels=2       # Matches ground truth mask channels
+                )
+
+
+
 
         elif model_name == "unetr":
             # Most MONAI versions: UNETR(in_channels=..., out_channels=..., img_size=(H,W,D), ...)
@@ -444,7 +457,7 @@ def supervised_warmup(
             torch.save(model.state_dict(), os.path.join(args.snapshot_path, "best_studentA.pth"))
             torch.save(model2.state_dict(), os.path.join(args.snapshot_path, "best_studentB.pth"))
             torch.save(ema_model.state_dict(), os.path.join(args.snapshot_path, "best_ema.pth"))
-            print(f"✔️ New GLOBAL BEST (Warmup epoch {epoch + 1}) saved with EMA Dice={dice_ema:.4f}")
+            print(f" New GLOBAL BEST (Warmup epoch {epoch + 1}) saved with EMA Dice={dice_ema:.4f}")
 
         # log everything to Excel (Dice + 95HD + ASD)
         ws_warmup.append([
